@@ -4,7 +4,7 @@ import React from "react";
 class Items extends React.Component{
     render(){
         
-        return this.props.items.map((item) => {
+        return this.props.items.map((item, index) => {
             return (
                 <div>
                     <div className="card  my-5 mx-5" style={{ width: "17rem" }} key={item.id}>
@@ -15,7 +15,7 @@ class Items extends React.Component{
                             <p className="card-text">Rs.{item.price} </p>
                         </div>
                         
-                            <button className="btn btn-dark text-white" >Add to cart</button>
+                            <button className="btn btn-dark text-white" onClick={() => this.props.addToCart(index)} >Add to cart</button>
                         
                     </div>
                 </div>

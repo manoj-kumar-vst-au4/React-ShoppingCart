@@ -1,5 +1,6 @@
 import React from 'react';
 import Items from "./component/items";
+import Cart from "./component/cart";
 
 class App extends React.Component{
   state={
@@ -19,19 +20,45 @@ class App extends React.Component{
        {"id":13, itemName:"Aurelia", description:"Block print straight kurta", price:1199, image:"https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/9329399/2019/4/24/8df4ed41-1e43-4a0d-97fe-eb47edbdbacd1556086871124-Libas-Women-Kurtas-6161556086869769-1.jpg"  },
        {"id":14, itemName:"Anouk", description:"Printed A-Line kurta", price:1099, image:"https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/9658675/2019/5/27/5866fc9e-ae67-4134-ae76-ab8731b443ac1558954938814-Indo-Era-Navy-Blue-Printed-Anarkali-Kurtas-2491558954937750-1.jpg"  },
        {"id":15, itemName:"Superdry",description:"Printed round neck tshirt", price:990, image:"https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/8353077/2019/3/11/c03fe2cf-4ae4-48bc-afa8-46e24475c2c81552307929169-Roadster-Women-Black-Printed-Top-3541552307927845-1.jpg"  }
-     ]
+     ],
+     cart:[]
   }
+
+   addToCart = (key) =>{
+     let filteredCart = [...this.state.cart, this.state.items[key]] 
+     this.setState({
+       cart : filteredCart
+     })
+   }
+
+   removeFromCart =(key) =>{
+     let filterItem = this.state.cart.filter((item, index)=>{
+       return index !== key
+     })
+     this.setState({
+       cart:filterItem
+     })
+   }
+
   render(){
     return(
-      <div className="container-fluid bg-light">
+      <div className="container-fluid-lg bg-light">
           <nav class="navbar navbar-light bg-dark d-flex justify-content-end">
-            <i className="fas fa-shopping-cart text-warning" style={{"font-size":"35px"}} ></i><p className="text-warning"></p>
+            <button className="btn px-0 py-0" ><i className="fas fa-shopping-cart text-warning" style={{"font-size":"30px"}} ></i></button><p className="text-warning" style={{"font-size":"10px"}}></p>
           </nav> 
         <div className="container">
           <div className="row">
             <div className="col-md-12 d-flex flex-row flex-wrap">
               <Items 
                 items={this.state.items}
+                addToCart={this.addToCart}
+                
+              />
+            </div>
+            <div className="col-md-4 border border-dark">
+              <Cart
+              cart={this.state.cart}
+              removeFromCart={this.removeFromCart}
               />
             </div>
           </div>
