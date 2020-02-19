@@ -14,9 +14,7 @@ class Items extends React.Component{
                             <p>{item.description}</p>
                             <p className="card-text">Rs.{item.price} </p>
                         </div>
-                        
                             <button className="btn btn-dark text-white" onClick={() => this.props.addToCart(index)} >Add to cart</button>
-                        
                     </div>
                 </div>
             );

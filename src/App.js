@@ -1,6 +1,7 @@
 import React from 'react';
 import Items from "./component/items";
 import Cart from "./component/cart";
+import {Modal} from "react-bootstrap"
 
 class App extends React.Component{
   state={
@@ -21,7 +22,8 @@ class App extends React.Component{
        {"id":14, itemName:"Anouk", description:"Printed A-Line kurta", price:1099, image:"https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/9658675/2019/5/27/5866fc9e-ae67-4134-ae76-ab8731b443ac1558954938814-Indo-Era-Navy-Blue-Printed-Anarkali-Kurtas-2491558954937750-1.jpg"  },
        {"id":15, itemName:"Superdry",description:"Printed round neck tshirt", price:990, image:"https://assets.myntassets.com/f_webp,dpr_1.5,q_60,w_210,c_limit,fl_progressive/assets/images/8353077/2019/3/11/c03fe2cf-4ae4-48bc-afa8-46e24475c2c81552307929169-Roadster-Women-Black-Printed-Top-3541552307927845-1.jpg"  }
      ],
-     cart:[]
+     cart:[],
+     show:false
   }
 
    addToCart = (key) =>{
@@ -40,31 +42,60 @@ class App extends React.Component{
      })
    }
 
+   handleClose = () => {
+    this.setState({
+      show: false
+    });
+  };
+
+  checkout = ()=>{this.setState({
+    cart:[]
+  })}
+  
+
   render(){
+    let total = 0;
+    this.state.cart.forEach(elem=>{
+      total+=elem.price;
+    })
+
+    
     return(
       <div className="container-fluid-lg bg-light">
           <nav class="navbar navbar-light bg-dark d-flex justify-content-end">
-            <button className="btn px-0 py-0" ><i className="fas fa-shopping-cart text-warning" style={{"font-size":"30px"}} ></i></button><p className="text-warning" style={{"font-size":"10px"}}></p>
+            <button className="btn px-0 py-0" onClick={()=>this.setState({show:true})}><i className="fas fa-shopping-cart text-warning" style={{"font-size":"30px"}} ></i></button><p className="text-warning" style={{"font-size":"10px"}}>{this.state.cart.length === 0?null:this.state.cart.length}</p>
           </nav> 
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12 d-flex flex-row flex-wrap">
-              <Items 
-                items={this.state.items}
-                addToCart={this.addToCart}
-                
-              />
-            </div>
-            <div className="col-md-4 border border-dark">
-              <Cart
-              cart={this.state.cart}
-              removeFromCart={this.removeFromCart}
-              />
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12 d-flex flex-row flex-wrap">
+                <Items 
+                  items={this.state.items}
+                  addToCart={this.addToCart}
+                />
+              </div>
             </div>
           </div>
-        </div>
+          <Modal show={this.state.show} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title><i className="fas fa-shopping-cart text-dark" style={{"font-size":"45px"}} ></i></Modal.Title>
+            </Modal.Header>
+            {this.state.cart.length === 0?<h3 className="text-center">Cart is Empty...</h3>:
+            <Modal.Body>
+              <Cart
+                cart={this.state.cart}
+                removeFromCart={this.removeFromCart}
+              />
+            </Modal.Body>}
+            <Modal.Footer>
+              {this.state.cart.length === 0?null:<div><button className="btn btn-success mr-5" onClick={()=>this.checkout()}>
+                checkout
+              </button>
+              <button className="btn btn-danger">
+                Total Amount: {total}rs.
+              </button></div>}
+            </Modal.Footer>
+          </Modal>
       </div>
-      
     )
   }
 }
